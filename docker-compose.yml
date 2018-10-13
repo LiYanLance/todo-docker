@@ -1,0 +1,54 @@
+version: "3.3"
+services:
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123swl
+    ports:
+      - "3307:3306"
+  
+  config-service:
+    image: liyanlance/config-service
+    restart: on-failure
+    ports:
+      - "8888:8888"
+
+  gateway:
+    image: liyanlance/gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "config-service"
+
+  app:
+    image: liyanlance/todo-app
+    ports:
+      - "80:80"
+
+  user-service:
+    image: liyanlance/user-service
+    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8082:8082"
+    depends_on:
+      - "config-service"
+      - "mysql"
+
+  todo-service:
+    image: liyanlance/todo-service
+    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8088:8088"
+    depends_on:
+      - "config-service"
+      - "mysql"
+      - "user-service"
