@@ -2,10 +2,11 @@ version: "3.3"
 services:
 
   mysql:
-    image: mysql/mysql-server:5.7
+    image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 123swl
+      TZ: Asia/Shanghai
     ports:
       - "3307:3306"
   
@@ -32,6 +33,10 @@ services:
     image: liyanlance/user-service
     restart: always
     deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
     ports:
@@ -44,6 +49,10 @@ services:
     image: liyanlance/todo-service
     restart: always
     deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
       restart_policy:
         condition: on-failure
     ports:
