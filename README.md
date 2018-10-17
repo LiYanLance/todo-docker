@@ -4,7 +4,7 @@
 
 将 docker-compose.yml 文件 clone 到本地, 拉取镜像:
 ```
-docker-compose up
+docker-compose pull
 ```
 
 启动:
